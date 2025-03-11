@@ -12,6 +12,7 @@
                 @else
                     <h2>Create Product</h2>
                     <form action="{{route('products.store')}}" method="POST">
+                        @csrf
                 @endif
                     <div class="form-group
                         @error('name')

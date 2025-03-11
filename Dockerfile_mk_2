@@ -1,0 +1,51 @@
+# Use official PHP image
+FROM php:8.2-fpm
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    zip unzip curl git \
+    nodejs \
+    npm  \
+    libpng-dev libjpeg-dev libfreetype6-dev libonig-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo_mysql mbstring \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN chmod -R 755 /var/www/html
+
+# # Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy Laravel project files
+COPY . .
+
+# Set up .env file if missing
+RUN cp .env.example .env || true
+
+
+
+# # Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# # # Set permissions
+RUN chmod -R 777 storage bootstrap/cache
+# # Set correct file permissions (especially for artisan)
+
+RUN npm install
+
+# # Expose port 8000 (default port for artisan serve)
+EXPOSE 8000
+
+EXPOSE 3000
+
+# # Start Laravel with php artisan serve
+
+COPY ./start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
+
+# CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=9000"]
