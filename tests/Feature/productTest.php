@@ -6,14 +6,23 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\Product;
 use Tests\TestCase;
+use App\Models\User;
 
 class productTest extends TestCase
 {
+    protected function setUp(): void{
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+
+    }
+
     /**
      * A basic feature test example.
      */
     public function test_index(): void
     {
+
         $response = $this->get('/products');
         $response->assertJsonIsArray();
     }
