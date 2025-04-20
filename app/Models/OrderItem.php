@@ -5,35 +5,35 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
-class Orders extends Model
+
+class OrderItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrdersFactory> */
+    /** @use HasFactory<\Database\Factories\OrderItemsFactory> */
     use HasFactory;
     use HasUuids;
 
     protected $cast = [
-        "id" => 'string'
+        'id' => 'string'
     ];
-    protected $fillable = [
-        'status',
-        'sub_total',
-        'total_price',
-        'total_tax',
-        'user_id'
+    // protected $table = 'OrderItems';
+    public $fillable = [
+        'order_id',
+        'product_id',
+        'quantity',
+        'price'
     ];
 
-    public function user(): BelongsTo{
-      return  $this->belongsTo(User::class);
-
-    }
     public static function booted() {
         static::creating(function ($model) {
             $model->id = Str::uuid();
         });
+    }
+
+    public function order():BelongsTo{
+        return $this->belongsTo(Order::class);
     }
 }

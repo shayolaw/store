@@ -10,10 +10,11 @@ use App\Models\User;
 
 class productTest extends TestCase
 {
+    use RefreshDatabase;
     protected function setUp(): void{
         parent::setUp();
-        $this->user = User::factory()->create();
-        $this->actingAs($this->user);
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
     }
 

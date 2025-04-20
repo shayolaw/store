@@ -17,6 +17,7 @@ class Product extends Model
         'id' => 'string',
     ];
     protected $fillable = [
+        'id',
         'name',
         'description',
         'price',

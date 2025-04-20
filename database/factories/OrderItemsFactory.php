@@ -3,11 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Orders;
+use App\Models\Order;
 use App\Models\Product;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItems>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItem>
  */
 class OrderItemsFactory extends Factory
 {
@@ -18,7 +18,7 @@ class OrderItemsFactory extends Factory
      */
     public function definition(): array
     {
-        $randomOrder = Orders::get();
+        $randomOrder = Order::get();
         $randomOrder = $randomOrder[0]->id;
         $randomProduct = Product::get();
         $randomProduct = $randomProduct[0]->id;

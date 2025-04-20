@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Orders;
+use App\Models\Order;
 
 class OrdersTest extends TestCase
 {
@@ -16,8 +17,8 @@ class OrdersTest extends TestCase
      */
     protected function setUp(): void{
         parent::setUp();
-        $this->user = User::factory()->create();
-        $this->actingAs($this->user);
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
     }
     public function test_get(): void
@@ -28,7 +29,18 @@ class OrdersTest extends TestCase
         $response->assertJsonIsArray();
     }
     public function test_successful_save(){
-        $payload = Orders::factory()->make()->toArray();
+        $payload = Order::factory()->create()->toArray();
+        $products = [];
+        for($i = 1; $i < 3; $i++){
+            $product = Product::factory()->create()->toArray();
+            $product['quantity'] = $i;
+            $products[] = $product;
+
+        }
+
+
+        Log::debug($products);
+        $payload['products'] = $products;
         $response = $this->post('/orders',$payload);
         $response->assertStatus((200));
         $response->assertJsonIsObject();
@@ -44,7 +56,7 @@ class OrdersTest extends TestCase
         $response->assertJsonValidationErrors(['user_id']);
     }
     public function test_update_tax(){
-        $payload = Orders::factory()->create();
+        $payload = Order::factory()->create();
         $payload = $payload->toArray();
         $payload['total_tax'] = 10.00;
         $response = $this->put('/orders/'.$payload['id'],$payload);
@@ -55,13 +67,13 @@ class OrdersTest extends TestCase
         ]);
     }
     public function test_show(){
-        $payload = Orders::factory()->create()->toArray();
+        $payload = Order::factory()->create()->toArray();
         $response = $this->get('/orders/'.$payload['id']);
         $response->assertStatus(200);
         $response->assertJsonIsObject();
     }
     public function test_delete(){
-        $payload = Orders::factory()->create()->toArray();
+        $payload = Order::factory()->create()->toArray();
         Log::info('id of deleted order is' .$payload['id']);
         $response = $this->delete('/orders/delete/'.$payload['id']);
         $response->assertStatus(200);
