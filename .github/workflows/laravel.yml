@@ -16,8 +16,8 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: sail
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
