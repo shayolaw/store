@@ -16,8 +16,10 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: testing
+          MYSQL_USER: sayo
+          MYSQL_PASSWORD: password
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
@@ -34,7 +36,7 @@ jobs:
         extensions: mbstring, bcmath, pdo_mysql
 
     - name: Copy .env.example to .env
-      run: cp .env.example .env
+      run: cp .env.testing .env
 
     - name: Install Composer dependencies
       run: composer install --no-progress --no-interaction --prefer-dist
