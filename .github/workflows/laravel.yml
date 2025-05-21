@@ -16,7 +16,7 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: testing
           MYSQL_USER: sayo
           MYSQL_PASSWORD: password
@@ -41,14 +41,14 @@ jobs:
     - name: Install Composer dependencies
       run: composer install --no-progress --no-interaction --prefer-dist
     
-    - name: Update environment variables
-      run: |
-          echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
-          echo "DB_PORT=3306" >> .env
-          echo "DB_DATABASE=testing" >> .env
-          echo "DB_USERNAME=sayo" >> .env
-          echo "DB_PASSWORD=password" >> .env
+    # - name: Update environment variables
+    #   run: |
+    #       echo "DB_CONNECTION=mysql" >> .env
+    #       echo "DB_HOST=127.0.0.1" >> .env
+    #       echo "DB_PORT=3306" >> .env
+    #       echo "DB_DATABASE=testing" >> .env
+    #       echo "DB_USERNAME=sayo" >> .env
+    #       echo "DB_PASSWORD=password" >> .env
 
     - name: Generate app key
       run: php artisan key:generate
