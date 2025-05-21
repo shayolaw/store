@@ -37,6 +37,12 @@ jobs:
 
     - name: Copy .env.example to .env
       run: cp .env.testing .env
+    - name: adds .env secret keys
+      env: 
+        STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+        STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+        STRIPE_WEBHOOK: ${{ secrets.STRIPE_WEBHOOK }}
+
 
     - name: Install Composer dependencies
       run: composer install --no-progress --no-interaction --prefer-dist
