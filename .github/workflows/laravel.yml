@@ -10,21 +10,21 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
 
-    # services:
-    #   mysql:
-    #     image: mysql:8
-    #     ports:
-    #       - 3306:3306
-    #     env:
-    #       MYSQL_ROOT_PASSWORD: password
-    #       MYSQL_DATABASE: testing
-    #       MYSQL_USER: sayo
-    #       MYSQL_PASSWORD: password
-    #     options: >-
-    #       --health-cmd="mysqladmin ping"
-    #       --health-interval=10s
-    #       --health-timeout=5s
-    #       --health-retries=3
+    services:
+      mysql:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: secret
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
     - uses: actions/checkout@v3
@@ -40,12 +40,18 @@ jobs:
 
     - name: Install Composer dependencies
       run: composer install --no-progress --no-interaction --prefer-dist
+    
+    - name: Update environment variables
+      run: |
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=laravel" >> .env
+          echo "DB_USERNAME=laravel" >> .env
+          echo "DB_PASSWORD=secret" >> .env
 
     - name: Generate app key
       run: php artisan key:generate
-      
-    # - name: Install MySQL client
-    #   run: sudo apt-get update && sudo apt-get install -y mysql-client
 
     - name: Run migrations
       run: php artisan migrate --force
