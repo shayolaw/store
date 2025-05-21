@@ -16,7 +16,7 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: testing
           MYSQL_USER: sayo
           MYSQL_PASSWORD: password
@@ -43,7 +43,10 @@ jobs:
 
     - name: Generate app key
       run: php artisan key:generate
-    
+      
+    - name: Install MySQL client
+      run: sudo apt-get update && sudo apt-get install -y mysql-client
+
     - name: Wait for MySQL to be ready
       run: |
         until mysqladmin ping -h"mysql" --silent; do
