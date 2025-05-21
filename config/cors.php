@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*','http://localhost:5173'],
+    'allowed_origins' => ['https://artemis2.ngrok.app','http://localhost:3000','https://frontend.shayolaw.ca'],
 
     'allowed_origins_patterns' => [],
 

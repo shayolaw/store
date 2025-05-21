@@ -13,6 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
+        $middleware->validateCsrfTokens(except: [
+            'stripe/*',
+            '/api/approve_payment' // <-- exclude this route
+        ]);
         $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
